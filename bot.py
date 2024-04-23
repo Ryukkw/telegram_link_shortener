@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 nest_asyncio.apply()
 
 # Telegram Bot Token
-TOKEN = 'Your_token_here'
+TOKEN = 'Bot_token_here'
 
 # Start command handler function
 async def start(update: Update, context: CallbackContext) -> None:
@@ -23,12 +23,12 @@ async def start(update: Update, context: CallbackContext) -> None:
 async def process_message(update: Update, context: CallbackContext) -> None:
     message_text = update.message.text
     # Regex pattern to find VK story links
-    link_pattern = r'https?://vk\.com/([a-zA-Z0-9_.-]+)\?act=stories&w=story-([0-9]+)_([0-9]+)'
+    link_pattern = r'https?://vk\.com/\S+\?[\S]*w=story-([0-9]+)_([0-9]+)'
     found_links = re.findall(link_pattern, message_text)
 
     if found_links:
         # Create and format the links into a single message
-        reformatted_links = [f'https://vk.com/story-{group[1]}_{group[2]}' for group in found_links]
+        reformatted_links = [f'https://vk.com/story-{group[0]}_{group[1]}' for group in found_links]
         links_message = '\n'.join(reformatted_links)
         await update.message.reply_text(links_message)
     else:
